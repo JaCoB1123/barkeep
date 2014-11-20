@@ -30,6 +30,7 @@ module Stats
     dataset = Commit.
         join(:comments, :commit_id => :id).
         filter("`comments`.`created_at` > ?", since).
+        filter("`commits`.`approved_at` IS NULL").
         join(:git_repos, :id => :commits__git_repo_id).
         group_and_count(:commits__sha, :git_repos__name___repo).order(:count.desc).limit(10)
     commits_sha_repo_count = dataset.all
